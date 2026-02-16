@@ -4,47 +4,43 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Anteprima Cassa</title>
+  <link rel="stylesheet" href="./style.css" />
   <style>
-    body{
-      margin:0;
-      background:#0b0e12;
-      display:grid;
-      place-items:center;
-      height:100vh;
-      color:white;
-      font-family:system-ui;
-    }
-    .card{
-      background:#111723;
-      padding:20px;
-      border-radius:16px;
-      text-align:center;
-    }
-    model-viewer{
-      width:320px;
-      height:320px;
-      margin:auto;
-    }
+    body{ place-items:stretch; }
+    .card{ width:100%; min-height:100vh; border-radius:0; }
+    .body{ gap:12px; }
+    model-viewer{ width:100%; height:420px; background:rgba(0,0,0,.25); border-radius:18px; border:1px solid rgba(255,255,255,.12); }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Cassa del tesoro</h2>
+  <main class="card">
+    <div class="header">
+      <h1 class="h1">Anteprima del Segno</h1>
+      <p class="sub">Android: ruota e zooma la cassa. iPhone: lo stesso bottone aprirà AR reale.</p>
+    </div>
 
-    <model-viewer
-      src="/chest.glb"
-      ios-src="/chest.usdz"
-      ar
-      ar-modes="scene-viewer quick-look webxr"
-      auto-rotate
-      camera-controls>
-    </model-viewer>
+    <div class="body">
+      <div class="box">
+        <model-viewer
+          src="/chest.glb"
+          ios-src="/chest.usdz"
+          ar
+          ar-modes="scene-viewer quick-look webxr"
+          camera-controls
+          auto-rotate>
+        </model-viewer>
 
-    <p>Su iPhone apparirà nello spazio reale.</p>
-  </div>
+        <small class="foot">
+          Se su Android non vedi nulla, stai usando un browser che blocca model-viewer: usa Chrome.
+        </small>
+      </div>
 
-  <script type="module"
-    src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
-  </script>
+      <div class="actions">
+        <a class="btnLink" href="./index.html">Torna</a>
+      </div>
+    </div>
+
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  </main>
 </body>
 </html>
