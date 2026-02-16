@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rotta del Tesoro</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="card">
+    <h1>Rotta del Tesoro</h1>
+    <p class="sub">Inserisci la frase segreta ricavata dal romanzo.</p>
+
+    <div class="row">
+      <label>Tappa</label>
+      <select id="stageId">
+        <option value="1">Tappa 1</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <label>Frase segreta</label>
+      <input id="passphrase" placeholder="Es. VELA NERA" autocomplete="off" />
+    </div>
+
+    <div class="actions">
+      <button id="btnUnlock">Sblocca</button>
+      <a id="btnAR" class="btnLink disabled" href="./ar-ios.html">Vai in AR</a>
+    </div>
+
+    <div class="box">
+      <div id="status">Nessuna tappa sbloccata.</div>
+      <div id="map" class="map" hidden></div>
+      <div id="coords" class="coords" hidden></div>
+    </div>
+
+    <small class="foot">Su iPhone la modalità AR usa Quick Look.</small>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
