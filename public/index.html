@@ -8,35 +8,74 @@
 </head>
 <body>
   <main class="card">
-    <h1>Rotta del Tesoro</h1>
-    <p class="sub">Inserisci la frase segreta ricavata dal romanzo.</p>
-
-    <div class="row">
-      <label>Tappa</label>
-      <select id="stageId">
-        <option value="1">Tappa 1</option>
-      </select>
+    <div class="header">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div>
+          <h1 class="h1">Rotta del Tesoro</h1>
+          <p class="sub">
+            Inserisci il <b>sigillo</b> trovato nel romanzo. Se è quello giusto, la mappa si aprirà come una taverna che
+            apre il retrobottega… 🍍
+          </p>
+        </div>
+        <div class="badge" id="badge">
+          <span class="dot" id="dot"></span>
+          <span id="badgeText">Sigillo chiuso</span>
+        </div>
+      </div>
     </div>
 
-    <div class="row">
-      <label>Frase segreta</label>
-      <input id="passphrase" placeholder="Es. VELA NERA" autocomplete="off" />
-    </div>
+    <div class="body">
+      <div class="row">
+        <label>Tappa</label>
+        <select id="stageId">
+          <option value="1">Tappa 1</option>
+        </select>
+      </div>
 
-    <div class="actions">
-      <button id="btnUnlock">Sblocca</button>
-      <a id="btnAR" class="btnLink disabled" href="./ar-ios.html">Vai in AR</a>
-    </div>
+      <div class="row">
+        <label>Sigillo (frase segreta)</label>
+        <input id="passphrase" placeholder="Es. VELA NERA" autocomplete="off" />
+      </div>
 
-    <div class="box">
-      <div id="status">Nessuna tappa sbloccata.</div>
-      <div id="map" class="map" hidden></div>
-      <div id="coords" class="coords" hidden></div>
-    </div>
+      <div class="actions">
+        <button id="btnUnlock">Sblocca</button>
+        <a id="btnAR" class="btnLink primary disabled" href="./ar-ios.html">Vai al Segno (AR)</a>
+      </div>
 
-    <small class="foot">Su iPhone la modalità AR usa Quick Look.</small>
+      <div class="box">
+        <div id="status">Nessuna tappa sbloccata.</div>
+        <div id="map" class="map" hidden></div>
+        <div id="coords" class="coords" hidden></div>
+      </div>
+
+      <small class="foot">
+        iPhone: la modalità AR si apre con Quick Look (file .usdz). Nessuna app extra.
+      </small>
+    </div>
   </main>
 
   <script type="module" src="./app.js"></script>
+
+  <script>
+    // Solo estetica: aggiorna il badge in base al testo di stato
+    const statusEl = document.getElementById("status");
+    const dot = document.getElementById("dot");
+    const badgeText = document.getElementById("badgeText");
+
+    const obs = new MutationObserver(() => {
+      const t = (statusEl.textContent || "").toLowerCase();
+      if (t.includes("sbloccata")) {
+        dot.className = "dot ok";
+        badgeText.textContent = "Sigillo aperto";
+      } else if (t.includes("errore")) {
+        dot.className = "dot bad";
+        badgeText.textContent = "Sigillo respinto";
+      } else {
+        dot.className = "dot";
+        badgeText.textContent = "Sigillo chiuso";
+      }
+    });
+    obs.observe(statusEl, { childList:true, subtree:true, characterData:true });
+  </script>
 </body>
 </html>
