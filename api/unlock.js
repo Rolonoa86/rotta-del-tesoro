@@ -6,9 +6,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "CHANGE_ME_IN_VERCEL_ENV";
 const STAGES_SECRET = {
   "1": {
     passphrase: "VELA NERA",
-    lat: 41.000000,
-    lon: 12.000000,
-    radiusMeters: 50
+    lat: 41.857694,
+    lon: 12.655688,
+    radiusMeters: 25
   }
 };
 
