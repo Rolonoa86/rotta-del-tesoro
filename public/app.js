@@ -23,6 +23,7 @@ function loadUnlocked(stageId) {
 
 function renderUnlocked(stageId) {
   const u = loadUnlocked(stageId);
+
   if (!u) {
     statusEl.textContent = "Nessuna tappa sbloccata.";
     mapEl.hidden = true;
@@ -32,16 +33,16 @@ function renderUnlocked(stageId) {
   }
 
   const { lat, lon, radiusMeters } = u.stage;
-  statusEl.textContent = `Tappa ${stageId} sbloccata. Vai al punto e apri la modalità AR.`;
+  statusEl.textContent = `Tappa ${stageId} sbloccata. Apri la mappa e vai al punto, poi apri l’anteprima/AR.`;
 
   const osmLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=19/${lat}/${lon}`;
   mapEl.innerHTML = `
     <div style="padding:12px;">
-      <a href="${osmLink}" target="_blank" rel="noopener" style="color:#8fb3ff; font-weight:800;">
+      <a href="${osmLink}" target="_blank" rel="noopener" style="color:#8fb3ff; font-weight:900;">
         Apri mappa
       </a>
       <div style="margin-top:8px; color:#b8c4d8; font-size:13px;">
-        Il segno apparirà entro ~${radiusMeters}m dal punto.
+        Il segno appare entro ~${radiusMeters}m dal punto.
       </div>
     </div>
   `;
@@ -50,7 +51,8 @@ function renderUnlocked(stageId) {
   coordsEl.textContent = `Coordinate: ${lat.toFixed(6)}, ${lon.toFixed(6)} · Raggio: ${radiusMeters}m`;
   coordsEl.hidden = false;
 
-  btnAR.href = `./ar-ios.html?stageId=${encodeURIComponent(stageId)}`;
+  // QUI: mandiamo TUTTI alla preview (Android vede 3D, iPhone può aprire AR da lì)
+  btnAR.href = `./preview.html?stageId=${encodeURIComponent(stageId)}`;
   btnAR.classList.remove("disabled");
 }
 
@@ -65,11 +67,14 @@ btnUnlock.addEventListener("click", async () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ stageId, passphrase })
     });
+
     const data = await r.json();
+
     if (!data.ok) {
       statusEl.textContent = `Errore: ${data.error || "sblocco fallito"}`;
       return;
     }
+
     saveUnlocked(stageId, data.token, data.stage);
     renderUnlocked(stageId);
   } catch (e) {
@@ -77,4 +82,5 @@ btnUnlock.addEventListener("click", async () => {
   }
 });
 
+// Render iniziale
 renderUnlocked(stageIdEl.value);
