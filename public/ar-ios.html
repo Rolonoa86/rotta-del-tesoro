@@ -4,37 +4,73 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Rotta del Tesoro · AR</title>
-  <style>
-    body{margin:0;background:#0b0e12;color:#e9eef7;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;}
-    .card{width:min(720px,92vw);margin:24px auto;background:#111723;border:1px solid #1e2a3f;border-radius:16px;padding:16px;}
-    h1{margin:0 0 6px;font-size:20px;}
-    .sub{color:#b8c4d8;margin:0 0 14px;}
-    .box{background:#0f1420;border:1px solid #1e2a3f;border-radius:12px;padding:12px;}
-    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
-    button,a{display:inline-flex;align-items:center;justify-content:center;padding:12px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:#1a2740;color:#fff;font-weight:800;text-decoration:none;cursor:pointer;}
-    .primary{background:#2a6bff;border-color:#2a6bff;}
-    .disabled{opacity:.45;pointer-events:none;}
-    small{color:#96a6bf;display:block;margin-top:12px;}
-  </style>
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <div class="card">
-    <h1>Segno di Navarro (AR iPhone)</h1>
-    <p class="sub">Prima devi essere nel punto giusto. Poi potrai aprire l’oggetto in AR.</p>
+  <main class="card">
+    <div class="header">
+      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <div>
+          <h1 class="h1">Il Segno di Navarro</h1>
+          <p class="sub">
+            Qui la realtà fa finta di essere un palcoscenico. Se sei nel posto giusto, la cassa si farà vedere.
+          </p>
+        </div>
+        <div class="badge">
+          <span class="dot" id="dot"></span>
+          <span id="badgeText">In attesa</span>
+        </div>
+      </div>
+    </div>
 
-    <div class="box">
-      <div id="status">Controllo sblocco…</div>
-      <div id="detail" style="margin-top:6px;color:#b8c4d8;"></div>
+    <div class="body">
+      <div class="box">
+        <div id="status"><b>Controllo sblocco…</b></div>
+        <div id="detail" style="margin-top:8px;color:var(--muted);"></div>
 
-      <div class="row">
-        <button id="btnGeo">Verifica GPS</button>
-        <a id="btnAR" class="primary disabled" rel="ar" href="./chest.usdz">Apri in AR</a>
+        <div class="actions" style="margin-top:12px;">
+          <a id="btnHome" class="btnLink" href="./index.html">Torna alla Bussola</a>
+          <button id="btnGeo">Verifica GPS</button>
+          <a id="btnAR" class="btnLink primary disabled" rel="ar" href="./chest.usdz">Apri in AR</a>
+        </div>
+
+        <small class="foot">
+          Tip urbano: aspetta qualche secondo, poi premi “Verifica GPS”. Se sei vicino ma non entra, muoviti di 5–10 metri.
+        </small>
       </div>
 
-      <small>Se il GPS oscilla, muoviti di qualche metro e riprova.</small>
+      <div class="box">
+        <div style="font-weight:900; letter-spacing:.02em;">Istruzioni rapide</div>
+        <div style="margin-top:8px; color:var(--muted); font-size:13px; line-height:1.4;">
+          1) Questa pagina funziona solo se la tappa è già sbloccata.<br/>
+          2) Verifica GPS.<br/>
+          3) Quando il sigillo è verde, apri la cassa in AR.
+        </div>
+      </div>
     </div>
-  </div>
+  </main>
 
   <script type="module" src="./ar-ios.js"></script>
+
+  <script>
+    const statusEl = document.getElementById("status");
+    const dot = document.getElementById("dot");
+    const badgeText = document.getElementById("badgeText");
+
+    const obs = new MutationObserver(() => {
+      const t = (statusEl.textContent || "").toLowerCase();
+      if (t.includes("gps ok")) {
+        dot.className = "dot ok";
+        badgeText.textContent = "Sigillo attivo";
+      } else if (t.includes("fuori area") || t.includes("errore") || t.includes("non è sbloccata")) {
+        dot.className = "dot bad";
+        badgeText.textContent = "Sigillo chiuso";
+      } else {
+        dot.className = "dot";
+        badgeText.textContent = "In attesa";
+      }
+    });
+    obs.observe(statusEl, { childList:true, subtree:true, characterData:true });
+  </script>
 </body>
 </html>
