@@ -4,6 +4,7 @@ const statusEl = $("status");
 const detailEl = $("detail");
 const btnGeo = $("btnGeo");
 const btnAR = $("btnAR");
+const btnContinue = $("btnContinue");
 
 const dot = $("dot");
 const badgeText = $("badgeText");
@@ -76,11 +77,15 @@ let stage = null;
     stage = {
       lat: it.lat,
       lon: it.lon,
-      radiusMeters: it.radiusMeters
+      radiusMeters: it.radiusMeters,
+      arModel: it.arModel || "/pergamena.usdz"
     };
 
+    btnAR.href = stage.arModel;
+    btnContinue.href = `./pergamena.html?stageId=${encodeURIComponent(stageId)}`;
+
     statusEl.textContent = "Tappa sbloccata. Ora verifica GPS.";
-    detailEl.textContent = `Raggio: ${stage.radiusMeters}m`;
+    detailEl.textContent = `Raggio: ${stage.radiusMeters ?? "?"}m`;
     setBadge("idle");
   } catch (e) {
     statusEl.textContent = "Errore caricamento.";
@@ -93,7 +98,7 @@ btnGeo.addEventListener("click", async () => {
   try {
     if (!stage || typeof stage.lat !== "number" || typeof stage.lon !== "number") {
       statusEl.textContent = "Coordinate mancanti.";
-      detailEl.textContent = "Inserisci lat/lon/radius nella tappa in api/unlock.js e risblocca la tappa.";
+      detailEl.textContent = "Inserisci lat/lon/radiusMeters in api/unlock.js e ridistribuisci.";
       setBadge("bad");
       return;
     }
@@ -107,13 +112,15 @@ btnGeo.addEventListener("click", async () => {
 
     if (d <= stage.radiusMeters) {
       statusEl.textContent = `GPS OK ✅ (accuratezza ~${acc}m)`;
-      detailEl.textContent = "Ora puoi aprire l’AR.";
+      detailEl.textContent = "Ora puoi aprire l’AR e poi continuare.";
       btnAR.classList.remove("disabled");
+      btnContinue.classList.remove("disabled");
       setBadge("ok");
     } else {
       statusEl.textContent = "Fuori area.";
       detailEl.textContent = `Distanza ~${Math.round(d)}m (acc ~${acc}m). Avvicinati e riprova.`;
       btnAR.classList.add("disabled");
+      btnContinue.classList.add("disabled");
       setBadge("bad");
     }
   } catch (e) {
