@@ -16,37 +16,87 @@
       <div class="hr"></div>
 
       <div class="statusBox">
-        <div class="statusLine">Tocca la pergamena per aprirla</div>
-        <div class="muted">Quando il sigillo si spezza, compare il download del PDF.</div>
+        <div id="status" class="statusLine">Carico il sigillo…</div>
+        <div id="sub" class="muted"></div>
 
         <div id="roll" class="item" style="margin-top:10px; cursor:pointer; user-select:none;">
-          <b><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--bad);margin-right:8px;"></span>
+          <b id="sealLine">
+            <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--bad);margin-right:8px;"></span>
             Sigillo di cera: intatto
           </b>
 
           <div id="text" class="muted" style="margin-top:10px; display:none;">
             <b>Il rotolo si srotola con un fruscio.</b><br/><br/>
-            L’inchiostro non ti dà una frase. Ti dà una regola.<br/>
-            E la regola ti dà una tappa.
+            Ogni capitolo è un remo.<br/>
+            Ogni appunto, un chiodo.<br/>
+            Insieme tengono la rotta.
           </div>
 
           <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-            <a id="dl" class="btn primary disabled" href="/rotta-parte-2.pdf" download>Scarica PDF (Parte 2)</a>
+            <a id="dl" class="btn primary disabled" href="#" download>Scarica PDF</a>
             <a class="btn ghost" href="./index.html">Torna al Registro</a>
           </div>
         </div>
-
-        <div class="foot">Per tappa 2, cambierai questo link al PDF della parte 3, ecc.</div>
       </div>
     </div>
   </section>
 
-  <script>
+  <script type="module">
+    const statusEl = document.getElementById("status");
+    const subEl = document.getElementById("sub");
     const roll = document.getElementById("roll");
     const text = document.getElementById("text");
     const dl = document.getElementById("dl");
+    const sealLine = document.getElementById("sealLine");
+
+    function getStageId(){
+      const u = new URL(location.href);
+      return u.searchParams.get("stageId") || "1";
+    }
+    async function loadProgress(){
+      const r = await fetch("/api/progress", { credentials: "include" });
+      return r.json();
+    }
+
+    const stageId = getStageId();
+    let pdfHref = null;
+    let title = "";
+
+    (async () => {
+      const j = await loadProgress();
+      if(!j.ok){
+        statusEl.textContent = "Non sei registrato.";
+        subEl.textContent = "Apri /start.html dal QR oppure ripristina il codice.";
+        return;
+      }
+
+      const unlocked = j.progress.unlocked || {};
+      const it = unlocked[stageId];
+      if(!it){
+        statusEl.textContent = "Tappa non sbloccata.";
+        subEl.textContent = "Torna alla home, sblocca la tappa, poi rientra qui.";
+        return;
+      }
+
+      pdfHref = it.pdf;
+      title = it.title || `Tappa ${stageId}`;
+
+      statusEl.textContent = `Pergamena della tappa ${stageId}`;
+      subEl.textContent = title;
+    })();
+
     roll.addEventListener("click", () => {
+      if(!pdfHref){
+        statusEl.textContent = "PDF non disponibile.";
+        return;
+      }
       text.style.display = "block";
+      sealLine.innerHTML = `
+        <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--ok);margin-right:8px;"></span>
+        Sigillo di cera: spezzato
+      `;
+      dl.href = pdfHref;
+      dl.textContent = `Scarica PDF · ${title}`;
       dl.classList.remove("disabled");
     });
   </script>
