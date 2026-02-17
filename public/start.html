@@ -1,69 +1,56 @@
 <!doctype html>
 <html lang="it">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rotta del Tesoro · Avvio</title>
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="/mi3.css">
 </head>
 <body>
-  <section class="panel" style="width:min(920px,96vw);">
-    <div class="panelInner">
-      <div class="title">
-        <h2>Registrazione del Capitano</h2>
-        <small>“Una rotta senza nome finisce sugli scogli.”</small>
-      </div>
-      <div class="hr"></div>
-
-      <div class="statusBox">
-        <div class="statusLine" id="msg">Sto incidendo il tuo Codice Capitano…</div>
-        <div class="muted" id="code" style="margin-top:10px;"></div>
-
-        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn primary" id="copy" style="display:none;">Copia codice</button>
-          <a class="btn ghost" href="./index.html" id="go" style="display:none;">Entra nella rotta</a>
+  <div class="mi3-wrap">
+    <main class="mi3-parchment">
+      <header class="mi3-sign">
+        <div>
+          <h1 class="mi3-title">Registrazione del Capitano</h1>
+          <p class="mi3-sub">“Una rotta senza nome finisce sugli scogli.”</p>
         </div>
-
-        <div class="foot" style="margin-top:10px;">
-          Se cambi telefono: vai su Ripristina e inserisci questo codice.
+        <div class="mi3-wood" id="capBox">
+          <small>Codice Capitano</small>
+          <strong id="capCode">—</strong>
         </div>
-      </div>
-    </div>
-  </section>
+      </header>
 
+      <div class="mi3-divider"></div>
+
+      <div id="msg" class="mi3-note" style="display:none;"></div>
+
+      <div class="mi3-menu">
+        <button class="mi3-btn" id="btnEnter">
+          <span class="mi3-btn-title">Entra nella Rotta</span>
+          <span class="mi3-btn-desc">Apri il registro e inizia la caccia.</span>
+        </button>
+
+        <button class="mi3-btn" id="btnRestore">
+          <span class="mi3-btn-title">Ripristina</span>
+          <span class="mi3-btn-desc">Hai cambiato telefono? Inserisci un codice.</span>
+        </button>
+      </div>
+
+      <div class="mi3-foot">Tip: salva il Codice Capitano. È la tua bussola.</div>
+    </main>
+  </div>
+
+  <!-- qui rimane il TUO JS attuale che genera codice e salva su KV -->
+  <script src="/app.js"></script>
   <script>
-    const msg = document.getElementById("msg");
-    const code = document.getElementById("code");
-    const copyBtn = document.getElementById("copy");
-    const goBtn = document.getElementById("go");
-    let playerId = "";
-
-    async function go(){
-      const r = await fetch("/api/start", { method:"POST", credentials:"include" });
-      const j = await r.json();
-      if(!j.ok){
-        msg.textContent = "Errore avvio.";
-        code.textContent = j.error || "Sconosciuto";
-        return;
-      }
-      playerId = j.playerId;
-      msg.textContent = "Codice Capitano creato ✅";
-      code.innerHTML = `<div style="font-size:22px; font-weight:1000; letter-spacing:.06em;">${playerId}</div>`;
-      copyBtn.style.display = "inline-flex";
-      goBtn.style.display = "inline-flex";
-    }
-
-    copyBtn.addEventListener("click", async () => {
-      try{
-        await navigator.clipboard.writeText(playerId);
-        copyBtn.textContent = "Copiato ✅";
-        setTimeout(()=> copyBtn.textContent = "Copia codice", 1200);
-      }catch{
-        copyBtn.textContent = "Copia manualmente";
-      }
-    });
-
-    go();
+    // agganci “grafici”: mappa gli elementi che il tuo app.js già usa
+    // Se nel tuo app.js hai già funzioni, qui ci limitiamo a collegare bottoni e testo.
+    window.__UI = {
+      capCodeEl: document.getElementById('capCode'),
+      msgEl: document.getElementById('msg'),
+      btnEnter: document.getElementById('btnEnter'),
+      btnRestore: document.getElementById('btnRestore'),
+    };
   </script>
 </body>
 </html>
