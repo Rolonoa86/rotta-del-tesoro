@@ -7,62 +7,90 @@
   <link rel="stylesheet" href="/mi3.css">
 </head>
 <body>
-  <div class="mi3-wrap">
-    <main class="mi3-parchment">
-      <header class="mi3-sign">
+  <div class="wrap">
+    <main class="parchment">
+      <header class="header">
         <div>
-          <h1 class="mi3-title">Registro di Bordo</h1>
-          <p class="mi3-sub">Romanzo, Diario, Segni. Qui si segna tutto.</p>
+          <h1 class="title">Registro di Bordo</h1>
+          <p class="sub">“Il romanzo mente. Il diario interpreta. Il sigillo decide.”</p>
         </div>
-        <div class="mi3-wood">
-          <small>Capitano</small>
-          <strong id="capName">—</strong>
+
+        <!-- ID richiesto dal tuo app.js -->
+        <div class="wood-badge">
+          <small id="captainSmall">Capitano: …</small>
+          <strong>Rotta del Tesoro</strong>
         </div>
       </header>
 
-      <div class="mi3-divider"></div>
+      <div class="divider"></div>
 
-      <section class="mi3-note" id="statusBox">
-        Stato: <span id="statusText">in attesa…</span>
-      </section>
+      <div class="grid">
+        <!-- Colonna sinistra: sblocco -->
+        <section class="panel">
+          <div class="row" style="justify-content:space-between;">
+            <div>
+              <div class="label">Sblocca una tappa</div>
+              <div class="muted">Inserisci la soluzione trovata nel romanzo/diario.</div>
+            </div>
 
-      <div style="height:12px"></div>
+            <!-- Sigillo (dot + badgeText) -->
+            <div class="sigillo">
+              <span id="dot" class="dot"></span>
+              <span id="badgeText">Sigillo chiuso</span>
+            </div>
+          </div>
 
-      <section class="mi3-row">
-        <input class="mi3-input" id="stageInput" placeholder="Tappa (es. 1)" inputmode="numeric">
-        <input class="mi3-input" id="answerInput" placeholder="Soluzione (es. VELA NERA)">
-      </section>
+          <div style="height:12px"></div>
 
-      <div style="height:12px"></div>
+          <div class="row">
+            <label class="label" for="stageId">Tappa</label>
+            <select id="stageId" aria-label="Tappa"></select>
+          </div>
 
-      <div class="mi3-menu">
-        <button class="mi3-btn" id="btnUnlock">
-          <span class="mi3-btn-title">Sblocca Tappa</span>
-          <span class="mi3-btn-desc">Se la risposta è giusta, la rotta si apre.</span>
-        </button>
+          <div style="height:10px"></div>
 
-        <button class="mi3-btn" id="btnOpenPdf" disabled>
-          <span class="mi3-btn-title">Apri PDF sbloccato</span>
-          <span class="mi3-btn-desc" id="pdfHint">Nessuna tappa sbloccata.</span>
-        </button>
+          <div class="row">
+            <label class="label" for="passphrase">Soluzione</label>
+            <input id="passphrase" placeholder="Es. VELA NERA" autocomplete="off" />
+          </div>
+
+          <div class="menu">
+            <button id="btnUnlock" class="btn">
+              <span class="t">Incidi il Sigillo</span>
+              <span class="d">Se è corretta, la tappa si apre e appare nel registro.</span>
+            </button>
+
+            <!-- btnAR è un <a> nel tuo app.js (usa href + classList) -->
+            <a id="btnAR" class="btn-link btn disabled" href="#" target="_blank" rel="noopener">
+              <span class="t">Apri in AR</span>
+              <span class="d">Disponibile solo per tappe già sbloccate.</span>
+            </a>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <!-- status + hint richiesti dal tuo app.js -->
+          <div id="status" class="note">In attesa…</div>
+          <div style="height:10px"></div>
+          <div id="hint" class="note muted">Qui compariranno indizi e messaggi.</div>
+        </section>
+
+        <!-- Colonna destra: elenco -->
+        <section class="panel">
+          <div class="label">Capitoli sbloccati</div>
+          <div class="muted">Ogni tappa aggiunge un frammento di romanzo/diario in PDF.</div>
+
+          <!-- lista richiesta dal tuo app.js -->
+          <div id="unlockedList" class="list"></div>
+
+          <div class="muted" style="margin-top:12px;">
+            Tip: se cambi telefono, ripassa da <b>/start.html</b> per riallineare il Capitano.
+          </div>
+        </section>
       </div>
-
-      <div class="mi3-foot" id="hintFoot">Suggerimento: le risposte non guardano in faccia nessuno.</div>
     </main>
   </div>
 
   <script src="/app.js"></script>
-  <script>
-    window.__UI_REG = {
-      capName: document.getElementById('capName'),
-      statusText: document.getElementById('statusText'),
-      stageInput: document.getElementById('stageInput'),
-      answerInput: document.getElementById('answerInput'),
-      btnUnlock: document.getElementById('btnUnlock'),
-      btnOpenPdf: document.getElementById('btnOpenPdf'),
-      pdfHint: document.getElementById('pdfHint'),
-      hintFoot: document.getElementById('hintFoot'),
-    };
-  </script>
 </body>
 </html>
