@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Ripristina · Codice Capitano</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <section class="panel" style="width:min(920px,96vw);">
+    <div class="panelInner">
+      <div class="title">
+        <h2>Ripristina il Registro</h2>
+        <small>“Un capitano può perdere la nave. Non la rotta.”</small>
+      </div>
+      <div class="hr"></div>
+
+      <div class="statusBox">
+        <div class="statusLine">Inserisci il Codice Capitano</div>
+        <div class="muted">Esempio: <b>NAV-7F3K-19QX</b></div>
+
+        <div style="margin-top:10px; display:grid; gap:10px;">
+          <input id="code" placeholder="NAV-...." autocomplete="off" />
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button id="btn" class="btn primary">Ripristina</button>
+            <a class="btn ghost" href="./index.html">Torna alla Bussola</a>
+          </div>
+          <div id="msg" class="muted"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const codeEl = document.getElementById("code");
+    const msgEl = document.getElementById("msg");
+    const btn = document.getElementById("btn");
+
+    btn.addEventListener("click", async () => {
+      const playerId = (codeEl.value || "").trim().toUpperCase();
+      msgEl.textContent = "Controllo il codice…";
+
+      try {
+        const r = await fetch("/api/restore", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ playerId })
+        });
+        const j = await r.json();
+
+        if (!j.ok) {
+          msgEl.textContent = j.error === "CODE_NOT_FOUND"
+            ? "Codice non trovato. Controlla lettere e trattini."
+            : ("Errore: " + (j.error || "sconosciuto"));
+          return;
+        }
+
+        msgEl.innerHTML = `Ripristino riuscito ✅ Bentornato, <b>${j.playerId}</b>.`;
+        setTimeout(() => location.href = "/index.html", 900);
+      } catch {
+        msgEl.textContent = "Errore di rete.";
+      }
+    });
+  </script>
+</body>
+</html>
