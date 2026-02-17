@@ -3,74 +3,66 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Rotta del Tesoro · AR</title>
+  <title>Rotta del Tesoro · Segno</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <main class="card">
-    <div class="header">
-      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;">
-        <div>
-          <h1 class="h1">Il Segno di Navarro</h1>
-          <p class="sub">
-            Qui la realtà fa finta di essere un palcoscenico. Se sei nel posto giusto, la cassa si farà vedere.
-          </p>
-        </div>
-        <div class="badge">
-          <span class="dot" id="dot"></span>
-          <span id="badgeText">In attesa</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="body">
-      <div class="box">
-        <div id="status"><b>Controllo sblocco…</b></div>
-        <div id="detail" style="margin-top:8px;color:var(--muted);"></div>
-
-        <div class="actions" style="margin-top:12px;">
-          <a id="btnHome" class="btnLink" href="./index.html">Torna alla Bussola</a>
-          <button id="btnGeo">Verifica GPS</button>
-          <a id="btnAR" class="btnLink primary disabled" rel="ar" href="./chest.usdz">Apri in AR</a>
-        </div>
-
-        <small class="foot">
-          Tip urbano: aspetta qualche secondo, poi premi “Verifica GPS”. Se sei vicino ma non entra, muoviti di 5–10 metri.
-        </small>
+  <div class="stage">
+    <aside class="sign">
+      <div class="hanger">
+        <div class="chainDot"></div><div class="chainDot"></div><div class="chainDot"></div>
       </div>
 
-      <div class="box">
-        <div style="font-weight:900; letter-spacing:.02em;">Istruzioni rapide</div>
-        <div style="margin-top:8px; color:var(--muted); font-size:13px; line-height:1.4;">
-          1) Questa pagina funziona solo se la tappa è già sbloccata.<br/>
-          2) Verifica GPS.<br/>
-          3) Quando il sigillo è verde, apri la cassa in AR.
+      <div class="signBody">
+        <div class="brand">
+          <div class="skull">✦</div>
+          <div>
+            <h1>Il Segno</h1>
+            <p>Il luogo decide. Tu chiedi il permesso col GPS.</p>
+          </div>
+        </div>
+
+        <div class="menu">
+          <div class="menuCard">
+            <span class="label">Stato</span>
+            <div id="status" style="font-weight:1000;">Carico tappa…</div>
+            <div id="detail" style="margin-top:6px; color:rgba(246,241,223,.78); font-size:13px;"></div>
+          </div>
+
+          <div class="btnRow">
+            <button id="btnGeo" class="btn primary">Verifica GPS</button>
+            <a id="btnAR" class="btn ghost disabled" rel="ar" href="/pergamena.usdz">Apri in AR</a>
+          </div>
+
+          <a class="btn ghost" href="./pergamena.html">Continua (Apri la pergamena)</a>
+
+          <div class="badge">
+            <span class="dot" id="dot"></span>
+            <span id="badgeText">In attesa</span>
+          </div>
         </div>
       </div>
-    </div>
-  </main>
+    </aside>
+
+    <section class="panel">
+      <div class="panelInner">
+        <div class="title">
+          <h2>Regola del luogo</h2>
+          <small>“Prima il punto. Poi il racconto.”</small>
+        </div>
+        <div class="hr"></div>
+        <div class="statusBox">
+          <div class="statusLine">Istruzioni</div>
+          <div class="muted">
+            1) Premi <b>Verifica GPS</b>.<br/>
+            2) Quando vedi <b>GPS OK</b>, si sblocca <b>Apri in AR</b>.<br/>
+            3) Dopo l’AR, premi <b>Continua</b> per srotolare la pergamena e scaricare il PDF.
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 
   <script type="module" src="./ar-ios.js"></script>
-
-  <script>
-    const statusEl = document.getElementById("status");
-    const dot = document.getElementById("dot");
-    const badgeText = document.getElementById("badgeText");
-
-    const obs = new MutationObserver(() => {
-      const t = (statusEl.textContent || "").toLowerCase();
-      if (t.includes("gps ok")) {
-        dot.className = "dot ok";
-        badgeText.textContent = "Sigillo attivo";
-      } else if (t.includes("fuori area") || t.includes("errore") || t.includes("non è sbloccata")) {
-        dot.className = "dot bad";
-        badgeText.textContent = "Sigillo chiuso";
-      } else {
-        dot.className = "dot";
-        badgeText.textContent = "In attesa";
-      }
-    });
-    obs.observe(statusEl, { childList:true, subtree:true, characterData:true });
-  </script>
 </body>
 </html>
