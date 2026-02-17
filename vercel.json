@@ -1,0 +1,16 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)\\.usdz",
+      "headers": [
+        { "key": "Content-Type", "value": "model/vnd.usdz+zip" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.pdf",
+      "headers": [
+        { "key": "Content-Type", "value": "application/pdf" }
+      ]
+    }
+  ]
+}
