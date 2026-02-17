@@ -5,16 +5,25 @@ const detailEl = $("detail");
 const btnGeo = $("btnGeo");
 const btnAR = $("btnAR");
 
-const STORAGE_KEY = "navarro_unlock_v1";
+const dot = $("dot");
+const badgeText = $("badgeText");
+
+function setBadge(state) {
+  if (state === "ok") {
+    dot.className = "dot ok";
+    badgeText.textContent = "Sigillo attivo";
+  } else if (state === "bad") {
+    dot.className = "dot bad";
+    badgeText.textContent = "Sigillo chiuso";
+  } else {
+    dot.className = "dot";
+    badgeText.textContent = "In attesa";
+  }
+}
 
 function getStageId() {
   const u = new URL(location.href);
   return u.searchParams.get("stageId") || "1";
-}
-
-function loadUnlocked(stageId) {
-  const all = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-  return all[stageId] || null;
 }
 
 function toRad(deg){ return deg*Math.PI/180; }
@@ -36,37 +45,80 @@ async function getPosition() {
   });
 }
 
-const stageId = getStageId();
-const unlocked = loadUnlocked(stageId);
-
-if (!unlocked?.token || !unlocked?.stage) {
-  statusEl.textContent = "Questa tappa non è sbloccata.";
-  detailEl.textContent = "Torna alla Bussola e inserisci la frase segreta.";
-} else {
-  statusEl.textContent = `Tappa ${stageId} sbloccata. Ora verifica il GPS.`;
-  detailEl.textContent = `Raggio: ${unlocked.stage.radiusMeters}m`;
+async function loadProgress() {
+  const r = await fetch("/api/progress", { credentials: "include" });
+  return r.json();
 }
+
+const stageId = getStageId();
+let stage = null;
+
+(async () => {
+  try {
+    const j = await loadProgress();
+    if (!j.ok) {
+      statusEl.textContent = "Non sei registrato.";
+      detailEl.textContent = "Apri /start.html dal QR oppure ripristina il codice.";
+      setBadge("bad");
+      return;
+    }
+
+    const unlocked = j.progress.unlocked || {};
+    const it = unlocked[stageId];
+
+    if (!it) {
+      statusEl.textContent = "Tappa non sbloccata.";
+      detailEl.textContent = "Torna alla home e sblocca questa tappa.";
+      setBadge("bad");
+      return;
+    }
+
+    stage = {
+      lat: it.lat,
+      lon: it.lon,
+      radiusMeters: it.radiusMeters
+    };
+
+    statusEl.textContent = "Tappa sbloccata. Ora verifica GPS.";
+    detailEl.textContent = `Raggio: ${stage.radiusMeters}m`;
+    setBadge("idle");
+  } catch (e) {
+    statusEl.textContent = "Errore caricamento.";
+    detailEl.textContent = e?.message || String(e);
+    setBadge("bad");
+  }
+})();
 
 btnGeo.addEventListener("click", async () => {
   try {
+    if (!stage || typeof stage.lat !== "number" || typeof stage.lon !== "number") {
+      statusEl.textContent = "Coordinate mancanti.";
+      detailEl.textContent = "Inserisci lat/lon/radius nella tappa in api/unlock.js e risblocca la tappa.";
+      setBadge("bad");
+      return;
+    }
+
     statusEl.textContent = "Verifico posizione…";
     const pos = await getPosition();
     const { latitude, longitude, accuracy } = pos.coords;
 
-    const d = distanceMeters(latitude, longitude, unlocked.stage.lat, unlocked.stage.lon);
+    const d = distanceMeters(latitude, longitude, stage.lat, stage.lon);
     const acc = Math.round(accuracy);
 
-    if (d <= unlocked.stage.radiusMeters) {
+    if (d <= stage.radiusMeters) {
       statusEl.textContent = `GPS OK ✅ (accuratezza ~${acc}m)`;
       detailEl.textContent = "Ora puoi aprire l’AR.";
       btnAR.classList.remove("disabled");
+      setBadge("ok");
     } else {
       statusEl.textContent = "Fuori area.";
       detailEl.textContent = `Distanza ~${Math.round(d)}m (acc ~${acc}m). Avvicinati e riprova.`;
       btnAR.classList.add("disabled");
+      setBadge("bad");
     }
   } catch (e) {
     statusEl.textContent = "Errore GPS.";
     detailEl.textContent = e?.message || String(e);
+    setBadge("bad");
   }
 });
