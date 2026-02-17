@@ -7,44 +7,49 @@
   <link rel="stylesheet" href="/mi3.css">
 </head>
 <body>
-  <div class="mi3-wrap">
-    <main class="mi3-parchment">
-      <header class="mi3-sign">
+  <div class="wrap">
+    <main class="parchment">
+      <header class="header">
         <div>
-          <h1 class="mi3-title">Registrazione del Capitano</h1>
-          <p class="mi3-sub">“Una rotta senza nome finisce sugli scogli.”</p>
+          <h1 class="title">Registrazione del Capitano</h1>
+          <p class="sub">“Una rotta senza nome finisce sugli scogli.”</p>
         </div>
-        <div class="mi3-wood" id="capBox">
+
+        <div class="wood-badge" id="capBox">
           <small>Codice Capitano</small>
           <strong id="capCode">—</strong>
         </div>
       </header>
 
-      <div class="mi3-divider"></div>
+      <div class="divider"></div>
 
-      <div id="msg" class="mi3-note" style="display:none;"></div>
+      <div id="msg" class="note" style="display:none;"></div>
 
-      <div class="mi3-menu">
-        <button class="mi3-btn" id="btnEnter">
-          <span class="mi3-btn-title">Entra nella Rotta</span>
-          <span class="mi3-btn-desc">Apri il registro e inizia la caccia.</span>
-        </button>
+      <section class="panel">
+        <div class="label">Menu</div>
+        <div class="muted">Conserva il codice. È la tua chiave e il tuo nome di mare.</div>
 
-        <button class="mi3-btn" id="btnRestore">
-          <span class="mi3-btn-title">Ripristina</span>
-          <span class="mi3-btn-desc">Hai cambiato telefono? Inserisci un codice.</span>
-        </button>
-      </div>
+        <div class="menu">
+          <button class="btn" id="btnEnter">
+            <span class="t">Entra nella Rotta</span>
+            <span class="d">Apri il registro e inizia la caccia.</span>
+          </button>
 
-      <div class="mi3-foot">Tip: salva il Codice Capitano. È la tua bussola.</div>
+          <button class="btn" id="btnRestore">
+            <span class="t">Ripristina</span>
+            <span class="d">Hai cambiato telefono? Inserisci il codice del Capitano.</span>
+          </button>
+        </div>
+
+        <div class="muted" style="margin-top:12px;">
+          Tip: fai uno screenshot del codice e mettilo tra i “preferiti”. Fine delle tragedie.
+        </div>
+      </section>
     </main>
   </div>
 
-  <!-- qui rimane il TUO JS attuale che genera codice e salva su KV -->
   <script src="/app.js"></script>
   <script>
-    // agganci “grafici”: mappa gli elementi che il tuo app.js già usa
-    // Se nel tuo app.js hai già funzioni, qui ci limitiamo a collegare bottoni e testo.
     window.__UI = {
       capCodeEl: document.getElementById('capCode'),
       msgEl: document.getElementById('msg'),
