@@ -13,7 +13,7 @@ const captainSmall = $("captainSmall");
 const dot = $("dot");
 const badgeText = $("badgeText");
 
-const MAX_STAGES = 30;
+const MAX_STAGES = 10;
 
 function setBadge(state) {
   if (state === "ok") {
