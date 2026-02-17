@@ -7,88 +7,74 @@
   <link rel="stylesheet" href="/mi3.css">
 </head>
 <body>
-  <div class="wrap">
-    <main class="parchment">
-      <header class="header">
-        <div>
-          <h1 class="title">Registro di Bordo</h1>
-          <p class="sub">“Il romanzo mente. Il diario interpreta. Il sigillo decide.”</p>
-        </div>
+  <div class="stage">
+    <div class="scene">
 
-        <!-- ID richiesto dal tuo app.js -->
-        <div class="wood-badge">
-          <small id="captainSmall">Capitano: …</small>
-          <strong>Rotta del Tesoro</strong>
-        </div>
-      </header>
+      <!-- SINISTRA: menu appeso -->
+      <aside class="hanging">
+        <div class="sign">
+          <div class="signTitle">Registro di Bordo</div>
+          <div class="signSub">Qui si segnano i sigilli spezzati.</div>
 
-      <div class="divider"></div>
-
-      <div class="grid">
-        <!-- Colonna sinistra: sblocco -->
-        <section class="panel">
-          <div class="row" style="justify-content:space-between;">
-            <div>
-              <div class="label">Sblocca una tappa</div>
-              <div class="muted">Inserisci la soluzione trovata nel romanzo/diario.</div>
-            </div>
-
-            <!-- Sigillo (dot + badgeText) -->
-            <div class="sigillo">
-              <span id="dot" class="dot"></span>
-              <span id="badgeText">Sigillo chiuso</span>
-            </div>
+          <div class="captainBadge">
+            <small>Capitano</small>
+            <strong id="captainSmall">—</strong>
           </div>
 
-          <div style="height:12px"></div>
-
-          <div class="row">
-            <label class="label" for="stageId">Tappa</label>
-            <select id="stageId" aria-label="Tappa"></select>
-          </div>
-
-          <div style="height:10px"></div>
-
-          <div class="row">
-            <label class="label" for="passphrase">Soluzione</label>
-            <input id="passphrase" placeholder="Es. VELA NERA" autocomplete="off" />
-          </div>
-
-          <div class="menu">
-            <button id="btnUnlock" class="btn">
-              <span class="t">Incidi il Sigillo</span>
-              <span class="d">Se è corretta, la tappa si apre e appare nel registro.</span>
+          <div style="margin-top:14px;">
+            <button class="menuBtn" id="btnGoStart">
+              <span class="t">Torna all’Avvio</span>
+              <span class="d">Se devi ripristinare o rigenerare.</span>
             </button>
 
-            <!-- btnAR è un <a> nel tuo app.js (usa href + classList) -->
-            <a id="btnAR" class="btn-link btn disabled" href="#" target="_blank" rel="noopener">
-              <span class="t">Apri in AR</span>
-              <span class="d">Disponibile solo per tappe già sbloccate.</span>
+            <a class="menuBtn actionLink" id="btnAR" href="./ar-ios.html?stageId=1">
+              <span>
+                <span class="t">Apri in AR</span>
+                <span class="d">Solo dopo lo sblocco di una tappa.</span>
+              </span>
             </a>
           </div>
 
-          <div style="height:12px"></div>
-
-          <!-- status + hint richiesti dal tuo app.js -->
-          <div id="status" class="note">In attesa…</div>
-          <div style="height:10px"></div>
-          <div id="hint" class="note muted">Qui compariranno indizi e messaggi.</div>
-        </section>
-
-        <!-- Colonna destra: elenco -->
-        <section class="panel">
-          <div class="label">Capitoli sbloccati</div>
-          <div class="muted">Ogni tappa aggiunge un frammento di romanzo/diario in PDF.</div>
-
-          <!-- lista richiesta dal tuo app.js -->
-          <div id="unlockedList" class="list"></div>
-
-          <div class="muted" style="margin-top:12px;">
-            Tip: se cambi telefono, ripassa da <b>/start.html</b> per riallineare il Capitano.
+          <div class="smallMuted" style="margin-top:8px;">
+            Se “Apri in AR” è grigio, non hai sbloccato quella tappa.
           </div>
+        </div>
+      </aside>
+
+      <!-- DESTRA: pergamena grande (sblocco + lista) -->
+      <main class="frame">
+        <section class="scroll">
+          <h1 class="h1">Sigillo & Sblocco</h1>
+          <p class="quote">Ogni risposta corretta apre una pagina del romanzo.</p>
+          <div class="hr"></div>
+
+          <div id="status" class="p">Carico il registro…</div>
+          <div id="hint" class="smallMuted"></div>
+
+          <div class="inputRow">
+            <div class="field">
+              <label for="stageId">Tappa</label>
+              <select id="stageId"></select>
+            </div>
+            <div class="field">
+              <label for="passphrase">Soluzione</label>
+              <input id="passphrase" placeholder="Scrivi la frase segreta…" />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="actionBtn" id="btnUnlock">Sblocca</button>
+          </div>
+
+          <div id="msg" class="msg" style="display:none;"></div>
+
+          <div class="hr"></div>
+          <div class="p"><b>Capitoli sbloccati</b></div>
+          <div id="unlockedList" class="list"></div>
         </section>
-      </div>
-    </main>
+      </main>
+
+    </div>
   </div>
 
   <script src="/app.js"></script>
