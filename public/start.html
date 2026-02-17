@@ -7,55 +7,65 @@
   <link rel="stylesheet" href="/mi3.css">
 </head>
 <body>
-  <div class="wrap">
-    <main class="parchment">
-      <header class="header">
-        <div>
-          <h1 class="title">Registrazione del Capitano</h1>
-          <p class="sub">“Una rotta senza nome finisce sugli scogli.”</p>
+  <div class="stage">
+    <div class="scene">
+
+      <!-- SINISTRA: cartello/menu appeso -->
+      <aside class="hanging">
+        <div class="sign">
+          <div class="signTitle">Registrazione del Capitano</div>
+          <div class="signSub">“Una rotta senza nome finisce sugli scogli.”</div>
+
+          <div class="captainBadge">
+            <small>Codice Capitano</small>
+            <strong id="capCode">—</strong>
+          </div>
+
+          <div style="margin-top:14px;">
+            <button class="menuBtn" id="btnEnter">
+              <span class="t">Entra nella Rotta</span>
+              <span class="d">Apri il registro e inizia la caccia.</span>
+            </button>
+
+            <button class="menuBtn" id="btnRestore">
+              <span class="t">Ripristina</span>
+              <span class="d">Hai cambiato telefono? Inserisci il codice.</span>
+            </button>
+          </div>
+
+          <div class="smallMuted" style="margin-top:8px;">
+            Tip: fai uno screenshot del codice e mettilo tra i preferiti.
+          </div>
         </div>
+      </aside>
 
-        <div class="wood-badge" id="capBox">
-          <small>Codice Capitano</small>
-          <strong id="capCode">—</strong>
-        </div>
-      </header>
+      <!-- DESTRA: pergamena grande (testo/istruzioni) -->
+      <main class="frame">
+        <section class="scroll">
+          <h1 class="h1">Rotta del Tesoro</h1>
+          <p class="quote">Il mare non perdona… ma la logica sì.</p>
+          <div class="hr"></div>
 
-      <div class="divider"></div>
+          <div id="msg" class="msg" style="display:none;"></div>
 
-      <div id="msg" class="note" style="display:none;"></div>
+          <p class="p">
+            Questa pagina serve solo a “battezzare” il dispositivo: crea il tuo Codice Capitano
+            e ti dà accesso al registro delle tappe.
+          </p>
 
-      <section class="panel">
-        <div class="label">Menu</div>
-        <div class="muted">Conserva il codice. È la tua chiave e il tuo nome di mare.</div>
+          <p class="p">
+            Quando sei pronto, premi <b>Entra nella Rotta</b>.
+          </p>
 
-        <div class="menu">
-          <button class="btn" id="btnEnter">
-            <span class="t">Entra nella Rotta</span>
-            <span class="d">Apri il registro e inizia la caccia.</span>
-          </button>
+          <div class="smallMuted">
+            Se qualcosa non va: torna qui e premi Ripristina.
+          </div>
+        </section>
+      </main>
 
-          <button class="btn" id="btnRestore">
-            <span class="t">Ripristina</span>
-            <span class="d">Hai cambiato telefono? Inserisci il codice del Capitano.</span>
-          </button>
-        </div>
-
-        <div class="muted" style="margin-top:12px;">
-          Tip: fai uno screenshot del codice e mettilo tra i preferiti.
-        </div>
-      </section>
-    </main>
+    </div>
   </div>
 
   <script src="/app.js"></script>
-  <script>
-    window.__UI = {
-      capCodeEl: document.getElementById('capCode'),
-      msgEl: document.getElementById('msg'),
-      btnEnter: document.getElementById('btnEnter'),
-      btnRestore: document.getElementById('btnRestore'),
-    };
-  </script>
 </body>
 </html>
