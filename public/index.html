@@ -3,74 +3,66 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rotta del Tesoro</title>
-  <link rel="stylesheet" href="./style.css" />
+  <title>Rotta del Tesoro · Registro</title>
+  <link rel="stylesheet" href="/mi3.css">
 </head>
 <body>
-  <div class="stage">
-    <aside class="sign">
-      <div class="hanger">
-        <div class="chainDot"></div><div class="chainDot"></div><div class="chainDot"></div>
+  <div class="mi3-wrap">
+    <main class="mi3-parchment">
+      <header class="mi3-sign">
+        <div>
+          <h1 class="mi3-title">Registro di Bordo</h1>
+          <p class="mi3-sub">Romanzo, Diario, Segni. Qui si segna tutto.</p>
+        </div>
+        <div class="mi3-wood">
+          <small>Capitano</small>
+          <strong id="capName">—</strong>
+        </div>
+      </header>
+
+      <div class="mi3-divider"></div>
+
+      <section class="mi3-note" id="statusBox">
+        Stato: <span id="statusText">in attesa…</span>
+      </section>
+
+      <div style="height:12px"></div>
+
+      <section class="mi3-row">
+        <input class="mi3-input" id="stageInput" placeholder="Tappa (es. 1)" inputmode="numeric">
+        <input class="mi3-input" id="answerInput" placeholder="Soluzione (es. VELA NERA)">
+      </section>
+
+      <div style="height:12px"></div>
+
+      <div class="mi3-menu">
+        <button class="mi3-btn" id="btnUnlock">
+          <span class="mi3-btn-title">Sblocca Tappa</span>
+          <span class="mi3-btn-desc">Se la risposta è giusta, la rotta si apre.</span>
+        </button>
+
+        <button class="mi3-btn" id="btnOpenPdf" disabled>
+          <span class="mi3-btn-title">Apri PDF sbloccato</span>
+          <span class="mi3-btn-desc" id="pdfHint">Nessuna tappa sbloccata.</span>
+        </button>
       </div>
 
-      <div class="signBody">
-        <div class="brand">
-          <div class="skull">☠</div>
-          <div>
-            <h1>Rotta del Tesoro</h1>
-            <p>Inserisci la soluzione per sbloccare capitoli, diario e segni.</p>
-          </div>
-        </div>
-
-        <div class="menu">
-          <div class="menuCard">
-            <span class="label">Tappa</span>
-            <select id="stageId"></select>
-          </div>
-
-          <div class="menuCard">
-            <span class="label">Soluzione (frase segreta)</span>
-            <input id="passphrase" placeholder="Es. VELA NERA" autocomplete="off" />
-          </div>
-
-          <div class="btnRow">
-            <button id="btnUnlock" class="btn primary">Sblocca</button>
-            <a id="btnAR" class="btn ghost disabled" href="./ar-ios.html">Vai al Segno</a>
-          </div>
-
-          <a class="btn ghost" href="./ripristina.html">Ripristina con Codice Capitano</a>
-
-          <div class="badge">
-            <span class="dot" id="dot"></span>
-            <span id="badgeText">Sigillo chiuso</span>
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <section class="panel">
-      <div class="panelInner">
-        <div class="title">
-          <h2>Registro di Bordo</h2>
-          <small id="captainSmall">Capitano: …</small>
-        </div>
-
-        <div class="hr"></div>
-
-        <div class="statusBox">
-          <div id="status" class="statusLine">Carico i tuoi progressi…</div>
-          <div id="hint" class="muted"></div>
-
-          <div id="unlockedList" class="list"></div>
-
-          <div class="foot">
-            PDF 0 (QR) deve puntare a <b>/start.html</b>.
-          </div>
-        </div>
-      </div>
-    </section>
+      <div class="mi3-foot" id="hintFoot">Suggerimento: le risposte non guardano in faccia nessuno.</div>
+    </main>
   </div>
 
-  <script type="module" src="./app.js"></script>
+  <script src="/app.js"></script>
+  <script>
+    window.__UI_REG = {
+      capName: document.getElementById('capName'),
+      statusText: document.getElementById('statusText'),
+      stageInput: document.getElementById('stageInput'),
+      answerInput: document.getElementById('answerInput'),
+      btnUnlock: document.getElementById('btnUnlock'),
+      btnOpenPdf: document.getElementById('btnOpenPdf'),
+      pdfHint: document.getElementById('pdfHint'),
+      hintFoot: document.getElementById('hintFoot'),
+    };
+  </script>
 </body>
 </html>
